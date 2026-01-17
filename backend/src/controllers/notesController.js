@@ -14,11 +14,11 @@ export async function createNote(req, res) {
   try {
     const { title, content } = req.body;
     //create
-    const newNote = new Note({ title: title, content: content }); //model
+    const note = new Note({ title: title, content: content }); //model
 
     //save to database
-    await newNote.save();
-    res.status(201).json({ message: "note created successfully" });
+    const savedNote = await note.save();
+    res.status(201).json(savedNote);
   } catch (error) {
     console.error("Error in getAllNotes controller", error);
     res.satatus(500).json({ message: "Internal server error" });
