@@ -1,15 +1,34 @@
-export function getAllNotes(req, res) {
-  res.status(200).send("You just fetched the notes");
+import Note from "../models/Note.js";
+
+export async function getAllNotes(req, res) {
+  try {
+    const notes = await Note.find(); //get all notes
+    res.status(200).json(notes);
+  } catch (error) {
+    console.error("Error in getAllNotes controller", error);
+    res.satatus(500).json({ message: "Internal server error" });
+  }
 }
 
-export function createNote(req, res) {
-  res.status(201).json({ message: "Note created successfully!" });
+export async function createNote(req, res) {
+  try {
+    const { title, content } = req.body;
+    //create
+    const newNote = new Note({ title: title, content: content }); //model
+
+    //save to database
+    await newNote.save();
+    res.status(201).json({ message: "note created successfully" });
+  } catch (error) {
+    console.error("Error in getAllNotes controller", error);
+    res.satatus(500).json({ message: "Internal server error" });
+  }
 }
 
-export function updateNote(req, res) {
+export async function updateNote(req, res) {
   res.status(200).json({ message: "Note updated successfully!" });
 }
 
-export function deleteNote(req, res) {
+export async function deleteNote(req, res) {
   res.status(200).json({ message: "Note deleted successfully!" });
 }
