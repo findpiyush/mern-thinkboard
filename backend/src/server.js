@@ -11,8 +11,14 @@ const PORT = process.env.PORT || 5001;
 
 connectDB();
 
-//middleware
-app.use(express.json());
+//middleware: this will parse the JSON bodies from postman/database
+app.use(express.json()); // allowes us to access req.body in routes and controllers
+
+//our simple custom middleware
+app.use((req, res, next) => {
+  console.log(`Req method is ${req.method} & Req URL is ${req.url}`);
+  next();
+});
 
 //Endpoint: it is a combination of a URL + HTTP method that lets the client interact with a specific resource
 //routes
