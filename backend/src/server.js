@@ -2,6 +2,7 @@ import express from "express";
 import notesRoutes from "./routes/notesRoutes.js";
 import { connectDB } from "./config/db.js";
 import dotenv from "dotenv";
+import rateLimiter from "./middleware/rateLimiter.js";
 
 dotenv.config();
 //console.log(process.env.MONGO_URI);
@@ -13,12 +14,16 @@ connectDB();
 
 //middleware: this will parse the JSON bodies from postman/database
 app.use(express.json()); // allowes us to access req.body in routes and controllers
+app.use(rateLimiter);
 
-//our simple custom middleware
+/*  our simple custom middleware
+
 app.use((req, res, next) => {
   console.log(`Req method is ${req.method} & Req URL is ${req.url}`);
   next();
 });
+
+*/
 
 //Endpoint: it is a combination of a URL + HTTP method that lets the client interact with a specific resource
 //routes
