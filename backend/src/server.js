@@ -1,7 +1,9 @@
 import express from "express";
+import dotenv from "dotenv";
+import cors from "cors";
+
 import notesRoutes from "./routes/notesRoutes.js";
 import { connectDB } from "./config/db.js";
-import dotenv from "dotenv";
 import rateLimiter from "./middleware/rateLimiter.js";
 
 dotenv.config();
@@ -11,6 +13,13 @@ const app = express(); //expressFunc().("/route",(request,response) => {})
 const PORT = process.env.PORT || 5001;
 
 //middleware: this will parse the JSON bodies from postman/database
+
+app.use(
+  //cors should be before rate limiter
+  cors({
+    origin: "http://localhost:5173",
+  })
+);
 app.use(express.json()); // allowes us to access req.body in routes and controllers
 app.use(rateLimiter);
 
