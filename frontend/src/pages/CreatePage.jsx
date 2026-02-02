@@ -3,6 +3,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router";
 import api from "../lib/axios";
+import { getUserId } from "../lib/userId";
 
 const CreatePage = () => {
   const [title, setTitle] = useState("");
@@ -21,9 +22,11 @@ const CreatePage = () => {
 
     setLoading(true);
     try {
+      const userId = getUserId();
       await api.post("/notes", {
         title,
         content,
+        userId,
       });
 
       toast.success("Note created successfully!");

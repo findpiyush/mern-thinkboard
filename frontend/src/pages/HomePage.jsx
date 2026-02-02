@@ -8,6 +8,7 @@ import NoteCard from "../components/NoteCard";
 //import axios from "axios";
 import api from "../lib/axios";
 import NotesNotFound from "../components/NotesNotFound";
+import { getUserId } from "../lib/userId";
 
 const HomePage = () => {
   const [isRateLimited, setIsRateLimited] = useState(false);
@@ -17,7 +18,10 @@ const HomePage = () => {
   useEffect(() => {
     const fetchNotes = async () => {
       try {
-        const res = await api.get("/notes");
+        const userId = getUserId();
+        const res = await api.get("/notes", {
+          params: { userId },
+        });
         setNotes(res.data); //console.log(res.data);
         setIsRateLimited(false);
       } catch (error) {

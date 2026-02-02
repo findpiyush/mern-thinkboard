@@ -2,7 +2,11 @@ import Note from "../models/Note.js";
 
 export async function getAllNotes(req, res) {
   try {
-    const notes = await Note.find().sort({ createdAt: -1 }); //get all notes (newest first)
+    const { userId } = req.query;
+    if (!userId) {
+      return res.status(400).json({ message: "userId is required" });
+    }
+    const notes = await Note.find({ userId }).sort({ createdAt: -1 }); //get all notes (newest first)
     res.status(200).json(notes);
   } catch (error) {
     console.error("Error in getAllNotes controller", error);
@@ -23,16 +27,19 @@ export async function getNoteById(req, res) {
 
 export async function createNote(req, res) {
   try {
-    const { title, content } = req.body;
+    const { title, content, userId } = req.body;
+    if (!userId) {
+      return res.status(400).json({ message: "userId is required" });
+    }
     //create
-    const note = new Note({ title: title, content: content }); //model
+    const note = new Note({ title, content, userId }); //model
 
     //save to database
     const savedNote = await note.save();
     res.status(201).json(savedNote);
   } catch (error) {
-    console.error("Error in getAllNotes controller", error);
-    res.satatus(500).json({ message: "Internal server error" });
+    console.error("Error in createNote controller", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 }
 
