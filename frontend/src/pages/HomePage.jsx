@@ -55,7 +55,6 @@ const HomePage = () => {
           </div>
         )}
       </div>
-      HomePage
     </div>
   );
 };

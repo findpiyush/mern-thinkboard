@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import path from "path";
 
 import notesRoutes from "./routes/notesRoutes.js";
 import { connectDB } from "./config/db.js";
@@ -11,15 +12,18 @@ dotenv.config();
 
 const app = express(); //expressFunc().("/route",(request,response) => {})
 const PORT = process.env.PORT || 5001;
+const __dirname = path.resolve(); // if u console log this it will give path to backend
 
 //middleware: this will parse the JSON bodies from postman/database
 
-app.use(
-  //cors should be before rate limiter
-  cors({
-    origin: "http://localhost:5173",
-  })
-);
+if (process.env.NODE_ENV !== "production") {
+  app.use(
+    //cors should be before rate limiter
+    cors({
+      origin: "http://localhost:5173",
+    })
+  );
+}
 app.use(express.json()); // allowes us to access req.body in routes and controllers
 app.use(rateLimiter);
 
@@ -35,6 +39,14 @@ app.use((req, res, next) => {
 //Endpoint: it is a combination of a URL + HTTP method that lets the client interact with a specific resource
 //routes
 app.use("/api/notes", notesRoutes); //if u send a request to /api/routes, its gonna hit the router in notesRouter.js
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../frontend/dist")));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
+  });
+}
 
 connectDB().then(() => {
   app.listen(PORT, () => {

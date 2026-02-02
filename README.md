@@ -10,6 +10,8 @@ PORT
 
 UPSTASH_REDIS_REST_URL
 UPSTASH_REDIS_REST_TOKEN
+
+NODE_ENV=development
 ```
 
 ### Run the Backend
