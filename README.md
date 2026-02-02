@@ -1,6 +1,8 @@
-# Thinkboard
+$${\color{#db924c}\huge\mathtt{ThinkBoard}}$$
 
+<div align="center">
 ThinkBoard is a simple app designed to help users take notes and stay organized.
+</div>
 
 ## Website Preview
 
